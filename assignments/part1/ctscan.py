@@ -35,12 +35,6 @@ reader2.Update()
 a2, b2 = reader2.GetOutput().GetScalarRange()
 print "Range of segmented image: %d--%d" % (a2, b2)
 
-
-
-
-
-
-
 #Liver
 liverFilter = vtk.vtkContourFilter()
 liverFilter.SetInputConnection(reader2.GetOutputPort())
