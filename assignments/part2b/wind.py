@@ -98,7 +98,7 @@ plane.SetYResolution(6)
 
 # Streamlines
 stream = vtk.vtkStreamLine()
-stream.SetSourceConnection(plane.GetOutputPort())
+stream.SetSourceConnection(plane.GetOutput())
 stream.SetInputData(reader.GetOutput())
 stream.SetIntegrationDirectionToForward()
 stream.SetIntegrator(vtk.vtkRungeKutta4())
@@ -120,7 +120,6 @@ cbar.SetPosition(0.1,0.03)
 cbar.SetHeight(0.1)
 cbar.SetWidth(0.8)
 cbar.SetTitle("Wind speed")
-
 
 #Sliceplane
 sliceplane = vtk.vtkImageDataGeometryFilter()
