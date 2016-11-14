@@ -56,15 +56,92 @@ data.SetPoints(molecules_io.read_points("coordinates.txt"))
 data.GetPointData().SetScalars(molecules_io.read_scalars("radii.txt"))
 data.SetLines(molecules_io.read_connections("connections.txt"))
 
-#
-#
-# Add your code here...
-#
-#
+
+
+#Glyphs#
+sphere = vtk.vtkSphereSource()
+sphere.SetRadius(0.25)
+sphere.SetThetaResolution(8)
+sphere.SetPhiResolution(8)
+
+sphereGlyph = vtk.vtkGlyph3D()
+sphereGlyph.SetInputData(data)
+sphereGlyph.SetSourceConnection(sphere.GetOutputPort())
+sphereGlyph.SetScaleModeToScaleByScalar()
+sphereGlyph.SetColorModeToColorByScalar()
+sphereGlyph.SetScaleFactor(2.0)
+
+colorTransferFunction = vtk.vtkColorTransferFunction()
+colorTransferFunction.AddRGBPoint(0.37, 0.545098, 0.0, 0.545098)
+colorTransferFunction.AddRGBPoint(0.68, 1.0, 1.0, 0.0)
+colorTransferFunction.AddRGBPoint(0.73, 0.0, 0.0, 1.0)
+colorTransferFunction.AddRGBPoint(0.74, 1.0, 0.0, 0.0)
+colorTransferFunction.AddRGBPoint(0.77, 0.0, 1.0, 1.0)
+colorTransferFunction.AddRGBPoint(2.0, 0.0, 1.0, 0.0)
+
+sphereMapper = vtk.vtkPolyDataMapper()
+sphereMapper.SetInputConnection(sphereGlyph.GetOutputPort())
+sphereMapper.SetLookupTable(colorTransferFunction)
+
+sphereActor = vtk.vtkActor()
+sphereActor.SetMapper(sphereMapper)
+
+#Tubes#
+tubeFilter = vtk.vtkTubeFilter()
+tubeFilter.SetInputData(data)
+tubeFilter.SetRadius(0.15)
+tubeFilter.SetNumberOfSides(7)
+
+tubeMapper = vtk.vtkPolyDataMapper()
+tubeMapper.SetInputConnection(tubeFilter.GetOutputPort())
+
+tubeMapper.ScalarVisibilityOff()
+
+tubeActor = vtk.vtkActor()
+tubeActor.SetMapper(tubeMapper)
+tubeActor.GetProperty().SetColor(0.8,0.8,0.8)
+
+tubeActor.GetProperty().SetSpecularColor(1, 1, 1)
+tubeActor.GetProperty().SetSpecular(0.3)
+tubeActor.GetProperty().SetSpecularPower(20)
+tubeActor.GetProperty().SetAmbient(0.2)
+tubeActor.GetProperty().SetDiffuse(0.8)
+
+#Legend
+legend = vtk.vtkLegendBoxActor()
+legend.SetNumberOfEntries(6)
+legend.BoxOn()
+legend.SetPosition(0,0.8)
+
+#legend.SetEntrySymbol(0, sphere.GetOutput())
+#legend.SetEntryString(0,"0.37")
+#legend.SetEntryColor(0, 0.545098, 0.0, 0.545098)
+
+legend.SetEntry(0, sphere.GetOutput(), "0.37", (0.5, 0.0, 0.5))
+legend.SetEntry(1, sphere.GetOutput(), "0.68", (1.0, 1.0, 0.0))
+legend.SetEntry(2, sphere.GetOutput(), "0.73", (0.0, 0.0, 1.0))
+legend.SetEntry(3, sphere.GetOutput(), "0.74", (1.0, 0.0, 0.0))
+legend.SetEntry(4, sphere.GetOutput(), "0.77", (0.0, 1.0, 1.0))
+legend.SetEntry(5, sphere.GetOutput(), "2.0", (0.0, 1.0, 0.0))
 
 # Create a renderer and add the actors to it
 renderer = vtk.vtkRenderer()
-renderer.SetBackground(0.2, 0.2, 0.2)
+renderer.SetBackground(0, 0, 0)
+# renderer.AddActor(...)
+renderer.AddActor(sphereActor)
+renderer.AddActor(tubeActor)
+renderer.AddActor(legend)
+
+
+
+
+
+
+
+
+# Create a renderer and add the actors to it
+# renderer = vtk.vtkRenderer()
+# renderer.SetBackground(0.2, 0.2, 0.2)
 # renderer.AddActor(...)
 
 # Create a render window
