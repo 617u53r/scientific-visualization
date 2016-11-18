@@ -14,7 +14,7 @@ data.GetPointData().SetScalars(readScalars(sys.argv[3]))
 
 # Make a new file!
 Data=vtk.vtkUnstructuredGridWriter()
-Data.SetInput(data) #Data.SetInputData(data) # For newer versions of VTK
+Data.SetInputData(data) #Data.SetInputData(data) # For newer versions of VTK
 # http://www.vtk.org/Wiki/VTK/VTK_6_Migration/Replacement_of_SetInput
 Data.SetFileName(sys.argv[4])
 Data.Write()

@@ -64,7 +64,7 @@ sphere.SetThetaResolution(8)
 sphere.SetPhiResolution(8)
 
 sphere_glyph = vtk.vtkGlyph3D()
-sphere_glyph.SetInputData(data)
+sphere_glyph.SetInput(data)
 sphere_glyph.SetSourceConnection(sphere.GetOutputPort())
 sphere_glyph.SetScaleModeToScaleByScalar()
 sphere_glyph.SetColorModeToColorByScalar()
@@ -87,7 +87,7 @@ sphere_actor.SetMapper(sphere_mapper)
 
 #Tubes
 tube_filter = vtk.vtkTubeFilter()
-tube_filter.SetInputData(data)
+tube_filter.SetInput(data)
 tube_filter.SetRadius(0.15)
 tube_filter.SetNumberOfSides(7)
 
@@ -104,30 +104,30 @@ tube_actor.GetProperty().SetSpecularPower(20)
 tube_actor.GetProperty().SetAmbient(0.2)
 tube_actor.GetProperty().SetDiffuse(0.8)
 
+# Add keyboard interaction for changing the isovalue interactively.
 # Nice addition but still too cluttered
-# Legend
-legend = vtk.vtkLegendBoxActor()
-legend.SetNumberOfEntries(6)
-legend.BoxOn()
-legend.SetPosition(0,0.8)
+colorbar = vtk.vtkLegendBoxActor()
+colorbar.SetNumberOfEntries(6)
+colorbar.BoxOn()
+colorbar.SetPosition(0, 0.8)
 
-legend.SetEntrySymbol(0, sphere.GetOutput())
-legend.SetEntryString(0,"0.37")
-legend.SetEntryColor(0, 0.545098, 0.0, 0.545098)
+colorbar.SetEntrySymbol(0, sphere.GetOutput())
+colorbar.SetEntryString(0, "0.37")
+colorbar.SetEntryColor(0, 0.545098, 0.0, 0.545098)
 
-legend.SetEntry(0, sphere.GetOutput(), "0.37", (0.5, 0.0, 0.5))
-legend.SetEntry(1, sphere.GetOutput(), "0.68", (1.0, 1.0, 0.0))
-legend.SetEntry(2, sphere.GetOutput(), "0.73", (0.0, 0.0, 1.0))
-legend.SetEntry(3, sphere.GetOutput(), "0.74", (1.0, 0.0, 0.0))
-legend.SetEntry(4, sphere.GetOutput(), "0.77", (0.0, 1.0, 1.0))
-legend.SetEntry(5, sphere.GetOutput(), "2.0", (0.0, 1.0, 0.0))
+colorbar.SetEntry(0, sphere.GetOutput(), "0.37", (0.5, 0.0, 0.5))
+colorbar.SetEntry(1, sphere.GetOutput(), "0.68", (1.0, 1.0, 0.0))
+colorbar.SetEntry(2, sphere.GetOutput(), "0.73", (0.0, 0.0, 1.0))
+colorbar.SetEntry(3, sphere.GetOutput(), "0.74", (1.0, 0.0, 0.0))
+colorbar.SetEntry(4, sphere.GetOutput(), "0.77", (0.0, 1.0, 1.0))
+colorbar.SetEntry(5, sphere.GetOutput(), "2.0", (0.0, 1.0, 0.0))
 
 # Create a renderer and add the actors to it
 renderer = vtk.vtkRenderer()
 renderer.SetBackground(0, 0, 0)
 renderer.AddActor(sphere_actor)
 renderer.AddActor(tube_actor)
-renderer.AddActor(legend)
+renderer.AddActor(colorbar)
 
 # Create a render window
 render_window = vtk.vtkRenderWindow()
